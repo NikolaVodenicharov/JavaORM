@@ -1,11 +1,13 @@
 package com.example.demo.services;
 
+import com.example.demo.domain.entities.Ingredient;
 import com.example.demo.domain.entities.Shampoo;
 import com.example.demo.domain.entities.Size;
 import com.example.demo.repositories.ShampooRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -34,5 +36,15 @@ public class ShampooServiceImpl implements ShampooService {
     @Override
     public int countByPriceLessThan(BigDecimal price) {
         return repository.countByPriceLessThan(price);
+    }
+
+    @Override
+    public List<Shampoo> findByIngredients(Collection<Ingredient> ingredients) {
+        return repository.findAllByIngredients(ingredients);
+    }
+
+    @Override
+    public List<Shampoo> allByIngredientsCountLessThan(int ingredientsCount) {
+        return repository.allByIngredientsCountLessThan(ingredientsCount);
     }
 }

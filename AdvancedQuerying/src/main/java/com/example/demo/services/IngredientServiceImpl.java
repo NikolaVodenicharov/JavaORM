@@ -4,10 +4,12 @@ import com.example.demo.domain.entities.Ingredient;
 import com.example.demo.repositories.IngredientRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 
 @Service
+@Transactional
 public class IngredientServiceImpl implements IngredientService{
     private IngredientRepository repository;
 
@@ -23,5 +25,20 @@ public class IngredientServiceImpl implements IngredientService{
     @Override
     public List<Ingredient> findAllByNameIn(Collection<String> names) {
         return repository.findAllByNameIn(names);
+    }
+
+    @Override
+    public Ingredient findById(long id) {
+        return repository.getOne(id);
+    }
+
+    @Override
+    public void updatePrice() {
+        repository.updateAllPrice();
+    }
+
+    @Override
+    public void updatePriceByName(Collection<String> ingredientNames) {
+        repository.updatePriceByName(ingredientNames);
     }
 }

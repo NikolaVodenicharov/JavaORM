@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.repositories.ShampooRepository;
 import com.example.demo.services.IngredientService;
 import com.example.demo.services.ShampooService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +17,19 @@ import java.util.Arrays;
 public class ConsoleRunner implements CommandLineRunner {
     private ShampooService shampooService;
     private IngredientService ingredientService;
+    private ShampooRepository repository;
 
     @Autowired
-    public ConsoleRunner(ShampooService shampooService, IngredientService ingredientService) {
+    public ConsoleRunner(ShampooService shampooService, IngredientService ingredientService, ShampooRepository repository) {
         this.shampooService = shampooService;
         this.ingredientService = ingredientService;
+        this.repository = repository;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        var ingredientsCount = this.shampooService.countByPriceLessThan(new BigDecimal("8.50"));
+        var names = new ArrayList<>(Arrays.asList("Apple", "Nettle"));
 
-        System.out.println(ingredientsCount);
-//        for(var ingredient : ingredientsCount){
-//            System.out.println(ingredient.getName());
-//        }
+        ingredientService.updatePriceByName(names);
     }
 }
