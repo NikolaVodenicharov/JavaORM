@@ -2,6 +2,7 @@ package spring.intro.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import spring.intro.common.FileManager;
 import spring.intro.entities.Author;
@@ -13,6 +14,7 @@ import spring.intro.repositories.AuthorRepository;
 import spring.intro.repositories.BookRepository;
 import spring.intro.repositories.CategoryRepository;
 
+import javax.transaction.Transactional;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.math.BigDecimal;
@@ -21,8 +23,8 @@ import java.util.*;
 
 @Service
 @Primary
+@Transactional
 public class BookServiceImpl implements BookService {
-    private final String BOOKS_PATH = "C:\\Users\\WorkStation\\Desktop\\JavaORM\\Bookshop\\src\\main\\resources\\DummyDataInitializer\\books.txt";
     private FileManager fileManager;
 
     private BookRepository bookRepository;
@@ -42,7 +44,8 @@ public class BookServiceImpl implements BookService {
             return;
         }
 
-        var lines = fileManager.readFile(BOOKS_PATH);
+        String booksPath = "C:\\Users\\WorkStation\\Desktop\\JavaORM\\Bookshop\\src\\main\\resources\\DummyDataInitializer\\books.txt";
+        var lines = fileManager.readFile(booksPath);
 
         var random = new Random();
 
@@ -124,5 +127,33 @@ public class BookServiceImpl implements BookService {
 
     public void save(Book book){
         this.bookRepository.saveAndFlush(book);
+    }
+
+    @Override
+    public List<Book> findAllByAgeRestriction(AgeRestriction ageRestriction) {
+        return bookRepository.findAllByAgeRestriction(ageRestriction);
+    }
+
+    @Override
+    public List<String> getTitlesByEditionsAndLessThanCopies(Edition edition, int copies) {
+        return bookRepository.getTitlesByEditionsAndLessThanCopies(edition, copies);
+    }
+
+    @Override
+    public long increaseCopiesByDate(Date date, int additionalCopies) {
+        bookRepository.increaseCopiesByDate(date);
+
+        var booksCountAfterDate = bookRepository.countAllByReleaseDateAfter(date);
+        var totalIncrease = booksCountAfterDate * additionalCopies;
+
+        return totalIncrease;
+    }
+
+    @Override
+    public int deleteAllByCopiesLessThan(int copies) {
+        var booksCount = bookRepository.countAllByCopiesLessThan(copies);
+        bookRepository.deleteAllByCopiesLessThan(copies);
+
+        return booksCount;
     }
 }
