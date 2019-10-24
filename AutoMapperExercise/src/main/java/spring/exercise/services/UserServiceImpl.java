@@ -3,7 +3,7 @@ package spring.exercise.services;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import spring.exercise.dataTransfareObjects.UserDto;
+import spring.exercise.dataTransfareObjects.UserRegisterDto;
 import spring.exercise.entities.User;
 import spring.exercise.repositories.UserRepository;
 
@@ -15,6 +15,7 @@ import javax.validation.ValidatorFactory;
 public class UserServiceImpl implements UserService {
     private static final String MESSAGE_CONFIRM_PASSWORD_NOT_MATCH = "Confirm password does not match.";
     private static final String MESSAGE_SUCCESSFUL_SAVED = "User is saved successful";
+    private static final String MESSAGE_EMAIL_EXIST = "User with that email is existing.";
 
     private UserRepository userRepository;
     private Validator validator;
@@ -37,13 +38,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String save(UserDto userDto, String confirmPassword) {
-        var isConfirmPasswordMatches = userDto.getPassword().equals(confirmPassword);
+    public String save(UserRegisterDto userRegisterDto) {
+        var isConfirmPasswordMatches = userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword());
         if (!isConfirmPasswordMatches){
             return MESSAGE_CONFIRM_PASSWORD_NOT_MATCH;
         }
 
-        var user = mapper.map(userDto, User.class);
+        var isUserEmailExist = userRepository.existsUserByEmail(userRegisterDto.getEmail());
+        if (isUserEmailExist){
+            return MESSAGE_EMAIL_EXIST;
+        }
+
+        var user = mapper.map(userRegisterDto, User.class);
 
         var violations = validator.validate(user);
         var areThereViolations = violations.size() > 0;

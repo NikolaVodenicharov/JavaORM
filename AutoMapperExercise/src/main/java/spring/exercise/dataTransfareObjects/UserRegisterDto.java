@@ -5,24 +5,21 @@ import spring.exercise.entities.Order;
 
 import java.util.Set;
 
-public class UserDto {
+public class UserRegisterDto {
     private String name;
     private String email;
     private String password;
+    private String confirmPassword;
     private boolean isAdministrator;
-    private Set<Order> orders;
-    private Set<Game> games;
 
-    public UserDto() {
+    public UserRegisterDto() {
     }
 
-    public UserDto(String name, String email, String password) {
+    public UserRegisterDto(String name, String email, String password, String confirmPassword) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.isAdministrator = isAdministrator;
-        this.orders = orders;
-        this.games = games;
+        this.confirmPassword = confirmPassword;
     }
 
     public String getName() {
@@ -46,24 +43,17 @@ public class UserDto {
         this.password = password;
     }
 
-    public boolean isAdministrator() {
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public boolean getIsAdministrator() {
         return isAdministrator;
     }
-    public void setAdministrator(boolean administrator) {
+    public void setIsAdministrator(boolean administrator) {
         isAdministrator = administrator;
-    }
-
-    public Set<Order> getOrders() {
-        return orders;
-    }
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
-    }
-
-    public Set<Game> getGames() {
-        return games;
-    }
-    public void setGames(Set<Game> games) {
-        this.games = games;
     }
 }

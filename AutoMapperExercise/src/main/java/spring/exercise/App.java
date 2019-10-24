@@ -3,7 +3,7 @@ package spring.exercise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import spring.exercise.dataTransfareObjects.UserDto;
+import spring.exercise.dataTransfareObjects.UserRegisterDto;
 import spring.exercise.services.UserService;
 
 import java.util.Scanner;
@@ -48,8 +48,8 @@ public class App implements CommandLineRunner {
         var confirmPassword = instructions[3];
         var name = instructions[4];
 
-        var userDto = new UserDto(name, email, password);
-        var message = userService.save(userDto, confirmPassword);
+        var userDto = new UserRegisterDto(name, email, password, confirmPassword);
+        var message = userService.save(userDto);
 
         System.out.println(message);
     }

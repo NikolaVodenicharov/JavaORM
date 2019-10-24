@@ -6,4 +6,5 @@ import spring.exercise.entities.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+    boolean existsUserByEmail(String email);
 }
