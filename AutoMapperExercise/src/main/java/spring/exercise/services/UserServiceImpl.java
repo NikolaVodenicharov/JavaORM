@@ -3,6 +3,7 @@ package spring.exercise.services;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import spring.exercise.common.ValidatorExtensions;
 import spring.exercise.dataTransfareObjects.UserLoginDto;
 import spring.exercise.dataTransfareObjects.UserRegisterDto;
 import spring.exercise.entities.User;
@@ -60,17 +61,9 @@ public class UserServiceImpl implements UserService {
 
         var user = mapper.map(userRegisterDto, User.class);
 
-        var violations = validator.validate(user);
-        var areThereViolations = violations.size() > 0;
-        if (areThereViolations){
-            var builder = new StringBuilder();
-
-            for (var violation : violations) {
-                builder.append(violation.getMessage());
-                builder.append(System.lineSeparator());
-            }
-
-            return builder.toString();
+        var violationMessages = ValidatorExtensions.getViolationMessages(user);
+        if (violationMessages != null){
+            return violationMessages;
         }
 
         var isFirstUser = userRepository.count() == 0;

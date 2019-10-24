@@ -6,4 +6,5 @@ import spring.exercise.entities.Game;
 
 @Repository
 public interface GameRepository extends JpaRepository<Game, Integer> {
+    boolean existsByTitle(String title);
 }
