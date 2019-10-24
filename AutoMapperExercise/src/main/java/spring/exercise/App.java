@@ -3,6 +3,7 @@ package spring.exercise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import spring.exercise.dataTransfareObjects.UserLoginDto;
 import spring.exercise.dataTransfareObjects.UserRegisterDto;
 import spring.exercise.services.UserService;
 
@@ -24,22 +25,23 @@ public class App implements CommandLineRunner {
 
     private void executeInstructions(){
         var scanner = new Scanner(System.in);
-        var instructions = scanner.nextLine().split("\\|");
-        var command = instructions[0];
 
-        switch (command){
-            case "RegisterUser":
-                registerUser(instructions);
-                break;
-            case "LoginUser":
-                loginUser(instructions);
-                break;
-            case "Logout":
-                logoutUser();
-                break;
+        while(true){
+            var instructions = scanner.nextLine().split("\\|");
+            var command = instructions[0];
+
+            switch (command){
+                case "RegisterUser":
+                    registerUser(instructions);
+                    break;
+                case "LoginUser":
+                    loginUser(instructions);
+                    break;
+                case "Logout":
+                    logoutUser();
+                    break;
+            }
         }
-
-
     }
 
     private void registerUser(String[] instructions){
@@ -49,7 +51,7 @@ public class App implements CommandLineRunner {
         var name = instructions[4];
 
         var userDto = new UserRegisterDto(name, email, password, confirmPassword);
-        var message = userService.save(userDto);
+        var message = userService.register(userDto);
 
         System.out.println(message);
     }
@@ -58,11 +60,15 @@ public class App implements CommandLineRunner {
         var email = instructions[1];
         var password = instructions[2];
 
+        var userDto = new UserLoginDto(email, password);
+        var message = userService.login(userDto);
 
+        System.out.println(message);
     }
 
     private void logoutUser(){
-
+        var message = userService.logout();
+        System.out.println(message);
     }
 
     private String[] extractPascalCaseWords(String pascalCaseWords){
