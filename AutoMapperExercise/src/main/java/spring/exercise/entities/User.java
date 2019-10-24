@@ -64,10 +64,10 @@ public class User {
         this.password = password;
     }
 
-    public boolean isAdministrator() {
+    public boolean getIsAdministrator() {
         return isAdministrator;
     }
-    public void setAdministrator(boolean administrator) {
+    public void setIsAdministrator(boolean administrator) {
         isAdministrator = administrator;
     }
 
